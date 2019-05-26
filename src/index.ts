@@ -1407,6 +1407,16 @@ function FlatpickrInstance(
     return self.calendarContainer.contains(elem);
   }
 
+  function isBootstrapModal(elem: HTMLElement): boolean {
+    const $ = (<any> window).jQuery;
+
+    if ($) {
+      return !!$(elem).data('bs.modal');
+    } else {
+      return false;
+    }
+  }
+
   function documentClick(e: MouseEvent) {
     if (self.isOpen && !self.config.inline) {
       const eventTarget = getEventTarget(e);
@@ -1429,7 +1439,8 @@ function FlatpickrInstance(
             !isCalendarElem(e.relatedTarget as HTMLElement)
           : !isInput &&
             !isCalendarElement &&
-            !isCalendarElem(e.relatedTarget as HTMLElement);
+            !isCalendarElem(e.relatedTarget as HTMLElement) &&
+            !isBootstrapModal(e.target as HTMLElement);
 
       const isIgnored = !self.config.ignoredFocusElements.some(elem =>
         elem.contains(eventTarget as Node)
